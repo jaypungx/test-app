@@ -1,8 +1,16 @@
-import Vue from 'vue'
-import App from './App.vue'
+import App from "./App.vue";
 
-Vue.config.productionTip = false
+// Webpack CSS import
+import "onsenui/css/onsenui.css";
+import "onsenui/css/onsen-css-components.css";
+
+// JS import
+import Vue from "vue";
+import VueOnsen from "vue-onsenui"; // This imports 'onsenui', so no need to import it separately
+
+Vue.config.productionTip = false;
+Vue.use(VueOnsen);
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  render: h => h(App)
+}).$mount("#app");
