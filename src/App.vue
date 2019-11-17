@@ -1,52 +1,62 @@
-<template id="main">
-  <div id="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    <!-- <v-ons-toolbar>
-        <v-ons-fab position="bottom right" :visible="fabVisible">
-          <v-ons-icon icon="md-plus"></v-ons-icon>
-        </v-ons-fab>
-    </v-ons-toolbar>-->
-    <v-ons-fab position="top right" :visible="fabVisible">
-      <v-ons-icon icon="md-plus"></v-ons-icon>
-    </v-ons-fab>
+<template>
+  <v-app>
+    <v-app-bar app color="primary" dark>
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
 
-    <div class="center">
-      <Overview />
-    </div>
-    <div class="center">
-      <!-- <Input /> -->
-    </div>
-  </div>
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          width="100"
+        />
+      </div>
+
+      <v-spacer></v-spacer>
+
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Latest Release</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-content>
+      <!-- <HelloWorld /> -->
+      <!-- <AddStudentForm class="mt-5" /> -->
+      <StudentList class="mt-5" />
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-// import HelloWorld from "./components/HelloWorld.vue";
-import Overview from "./components/Overview.vue";
-// import Input from "./components/Input.vue";
+// import HelloWorld from "./components/HelloWorld";
+// import AddStudentForm from "./components/AddStudentForm";
+import StudentList from "./components/StudentList";
 
 export default {
-  name: "app",
+  name: "App",
+
   components: {
-    // HelloWorld
-    Overview
-    // Input
+    // HelloWorld,
+    // AddStudentForm,
+    StudentList
   },
-  data() {
-    return {
-      FabVisible: true
-    };
-  }
+
+  data: () => ({
+    //
+  })
 };
 </script>
-
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
