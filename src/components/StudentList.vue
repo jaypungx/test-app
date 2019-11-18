@@ -79,9 +79,9 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">
+        <!-- <v-icon small class="mr-2" @click="editItem(item)">
           mdi-pencil
-        </v-icon>
+        </v-icon> -->
         <v-icon small @click="deleteItem(item)">
           mdi-delete
         </v-icon>
@@ -110,18 +110,6 @@
 
 <script>
 const request = require("request");
-
-const getData = () => {
-  //   let result = request("http://134.209.96.147:8080/data", (err, res, body) => {
-  //     return JSON.parse(body).data;
-  //   });
-  //   return result();
-  return [
-    { id: 1, fname: "John", lname: "Doe", batch: 5, birthday: "01/12/1991" },
-    { id: 2, fname: "ลุง", lname: "ตู่", batch: 5, birthday: "31/01/1901" },
-    { id: 3, fname: "ลุง", lname: "ตู่", batch: 5, birthday: "31/01/1901" }
-  ];
-};
 
 export default {
   data: () => ({
@@ -180,21 +168,20 @@ export default {
 
   methods: {
     initialize() {
-      this.students = getData();
+      this.students = this.getData();
     },
 
-    editItem(item) {
-      this.editedIndex = this.students.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
+    // editItem(item) {
+    //   this.editedIndex = this.students.indexOf(item);
+    //   this.editedItem = Object.assign({}, item);
+    //   this.dialog = true;
+    // },
 
     deleteItem(item) {
       const index = this.students.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        // this.snackbarOpen("Item deleted", "success");
-        this.deleteStudent(item.id);
-      this.students.splice(index, 1);
+        this.deleteStudent(item.id) &&
+        this.students.splice(index, 1);
     },
 
     snackbarOpen(txt, color) {
@@ -215,47 +202,52 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.students[this.editedIndex], this.editedItem);
       } else {
-        this.students.push(this.editedItem);
         this.addStudent(
-          this.editedItem.fname,
-          this.editedItem.lname,
+          this.editedItem.fname.toString(),
+          this.editedItem.lname.toString(),
           this.editedItem.batch,
-          this.editedItem.birthday
-        );
+          this.editedItem.birthday.toString()
+        ) &&
+          this.students.push(this.editedItem) &&
+          this.getData();
       }
       this.close();
     },
 
+    getData() {
+      request.get("http://134.209.96.147:8080/data", (err, res, body) => {
+        return (this.students = JSON.parse(body).data);
+      });
+    },
+
     addStudent(fname, lname, batch, birthday) {
-      const reqBody = {
-        fname: fname,
-        lname: lname,
-        batch: batch,
-        birthday: birthday
-      };
-      request.post(
-        "https://134.208.96.147:8080/addStudent",
-        { body: reqBody },
+      return request.post(
+        `http://134.209.96.147:8080/addStudent?fname=${fname}&lname=${lname}&batch=${batch}&birthday=${birthday}`,
         (err, res, body) => {
           if (err) this.snackbarOpen("Error when adding new student", "error");
           let result = JSON.parse(body);
           if (result.addStatus) {
             this.snackbarOpen("Student added", "success");
+            return true;
+          } else {
+            this.snackbarOpen("Failed to add student", "error");
+            return false;
           }
         }
       );
     },
 
     deleteStudent(id) {
-      let testTXT = `https://134.208.96.147:8080/deleteStudent/${id}`;
-      alert(testTXT);
-      request.delete(
-        `https://134.208.96.147:8080/deleteStudent/${id}`,
+      return request.delete(
+        `http://134.209.96.147:8080/deleteStudent/${id}`,
         (err, res, body) => {
           if (err) this.snackbarOpen("Error when deleting student", "error");
           let result = JSON.parse(body);
           if (result.deleteStatus) {
             this.snackbarOpen("Student deleted", "success");
+            return true;
+          } else {
+            this.snackbarOpen("Failed to delete student", "error");
           }
         }
       );
