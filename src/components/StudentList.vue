@@ -207,9 +207,8 @@ export default {
           this.editedItem.lname.toString(),
           this.editedItem.batch,
           this.editedItem.birthday.toString()
-        ) &&
-          this.students.push(this.editedItem) &&
-          this.getData();
+        ) && this.students.push(this.editedItem);
+        this.getData();
       }
       this.close();
     },
